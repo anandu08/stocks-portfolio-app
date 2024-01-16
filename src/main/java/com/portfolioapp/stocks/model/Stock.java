@@ -27,11 +27,7 @@ public class Stock {
     private BigDecimal low;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            @JoinColumn(name = "purchasePrice", referencedColumnName = "purchasePrice"),
-            @JoinColumn(name = "stockId", referencedColumnName = "stockId")
-    })
+    @JoinColumn(name = "user_stocks_id") // Combine primary key columns
     private UserStocks userStocks;
 
 

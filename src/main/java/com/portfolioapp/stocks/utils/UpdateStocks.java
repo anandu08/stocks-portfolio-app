@@ -22,14 +22,17 @@ public class UpdateStocks {
     }
 
     public void updater(String filePath) {
+
+        int i = 0;
         try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
             String[] header = csvReader.readNext();
 
             if (header != null) {
                 String[] line;
-                while ((line = csvReader.readNext()) != null) {
+                while ((line = csvReader.readNext()) != null&&i<100) {
                     Stock stock = mapToStock(line);
                     repository.save(stock);
+                    i++;
                 }
             }
         } catch (IOException | CsvValidationException e) {

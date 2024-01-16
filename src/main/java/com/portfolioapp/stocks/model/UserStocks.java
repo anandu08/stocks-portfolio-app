@@ -5,24 +5,33 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users-stocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(UserStocksId.class)
 public class UserStocks {
 
-    @EmbeddedId
-    private UserStocksId id;
+    @Id
+    private long userId;
 
-    @Column(name = "quantity")
+@Id
+    private BigDecimal purchasePrice;
+@Id
+    private String stockId;
+
+
     private long quantity;
 
     @OneToMany(mappedBy = "userStocks", cascade = CascadeType.ALL)
-    private Set<Stock> stocks;
+    private Set<Stock> stocks = new HashSet<>();
 
 
 }

@@ -5,6 +5,7 @@ import com.portfolioapp.stocks.model.UserStocks;
 import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.repository.UserStocksRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,18 +41,24 @@ public class UserController {
         if (quantity <= 0) {
             return "Invalid quantity. Quantity must be greater than 0.";
         }
-        System.out.println("Type value: '" + type + "'");
+
+
+
         if ("buy".equalsIgnoreCase(type)) {
             buyStock(userId, stock, quantity);
             return "Stock bought successfully.";
-        } else if ("sell".equalsIgnoreCase(type)) {
+        }
+
+        else if ("sell".equalsIgnoreCase(type)) {
             sellStock(userId, stock, quantity);
             return "Stock sold successfully.";
-        } else {
+        }
+
+        else {
             return "Invalid transaction type.";
         }
     }
-
+    @Transactional
     private void buyStock(long userId, Stock stock, long quantity) {
         UserStocks userStocks = new UserStocks();
         UserStocksId userStocksId = new UserStocksId();
@@ -77,7 +84,7 @@ public class UserController {
         }
 
     }
-
+    @Transactional
     private void sellStock(long userId, Stock stock, long quantity) {
         List<Object[]> userStockFields = userStocksRepo.findFieldsByUserIdAndStockId(userId, stock.getId());
 

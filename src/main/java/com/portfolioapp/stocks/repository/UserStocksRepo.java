@@ -16,7 +16,7 @@ public interface UserStocksRepo extends JpaRepository<UserStocks, UserStocksId> 
     List<Object[]> findFieldsByUserIdAndStockId(@Param("userId") long userId, @Param("stockId") String stockId);
 
     @Modifying
-    @Query("DELETE FROM UserStocks u WHERE u.id.userId = :userId AND :stockId IN (SELECT s.id FROM u.stocks s) AND u.id.purchasePrice = :purchasePrice")
+    @Query("DELETE FROM UserStocks u WHERE u.id.userId = :userId AND u.id.stockId = :stockId AND u.id.purchasePrice = :purchasePrice")
     void deleteByUserIdAndStockIdAndPurchasePrice(@Param("userId") long userId, @Param("stockId") String stockId, @Param("purchasePrice") BigDecimal purchasePrice);
 
     @Modifying
