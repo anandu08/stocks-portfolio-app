@@ -21,5 +21,5 @@ public class UserStocksId implements Serializable {
     private BigDecimal purchasePrice;
     @Column(name = "stockId")
     private String stockId;
-    // Constructors, getters, setters, and equals/hashCode methods
+
 }

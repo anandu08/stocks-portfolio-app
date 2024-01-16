@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -23,7 +22,7 @@ public class UserStocks {
     private long quantity;
 
     @OneToMany(mappedBy = "userStocks", cascade = CascadeType.ALL)
-    private List<Stock> stocks;
+    private Set<Stock> stocks;
 
 
 }

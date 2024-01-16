@@ -30,8 +30,7 @@ public class Stock {
     @JoinColumns({
             @JoinColumn(name = "userId", referencedColumnName = "userId"),
             @JoinColumn(name = "purchasePrice", referencedColumnName = "purchasePrice"),
-            @JoinColumn(name = "stockId", referencedColumnName = "stockId")  // Finally, 'stock_id'
-
+            @JoinColumn(name = "stockId", referencedColumnName = "stockId")
     })
     private UserStocks userStocks;
 
