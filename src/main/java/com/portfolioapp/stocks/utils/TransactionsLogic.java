@@ -1,6 +1,7 @@
 package com.portfolioapp.stocks.utils;
 
 import com.portfolioapp.stocks.model.Stock;
+import com.portfolioapp.stocks.model.Transactions;
 import com.portfolioapp.stocks.model.UserStocks;
 import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.StocksRepo;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
-public class Transactions {
+public class TransactionsLogic {
     @Autowired
     private StocksRepo stocksRepo;
     @Autowired
@@ -29,6 +30,8 @@ public class Transactions {
 
         UserStocks userStocks = new UserStocks();
         UserStocksId userStocksId = new UserStocksId();
+        Transactions transactions = new Transactions();
+
 
         userStocksId.setUserId(userId);
         userStocksId.setPurchasePrice(stock.getClosePrice());
@@ -40,6 +43,12 @@ public class Transactions {
         stocks.add(stock);
         userStocks.setStocks(stocks);
 
+
+        transactions.setUserId(userId);
+        transactions.setType("buy");
+        transactions.setStockId(stock.getId());
+        transactions.setTransactPrice(stock.getClosePrice());
+        transactions.setQuantity(quantity);
 
         Optional<UserStocks> userStocksOptional = userStocksRepo.findById(userStocksId);
 
@@ -57,12 +66,20 @@ public class Transactions {
 
     public void sellStock(long userId, Stock stock, long quantity) {
 
+        Transactions transactions = new Transactions();
+
 
         List<Object[]> userStockFields = userStocksRepo.findFieldsByUserIdAndStockId(userId, stock.getId());
 
         UserStocksId userStocksId = new UserStocksId();
         userStocksId.setStockId(stock.getId());
         userStocksId.setUserId(userId);
+
+        transactions.setUserId(userId);
+        transactions.setType("sell");
+        transactions.setStockId(stock.getId());
+        transactions.setTransactPrice(stock.getClosePrice());
+        transactions.setQuantity(quantity);
 
         System.out.println(userStockFields.size());
 

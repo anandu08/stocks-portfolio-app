@@ -1,16 +1,11 @@
 package com.portfolioapp.stocks.controller;
 
 import com.portfolioapp.stocks.model.Stock;
-import com.portfolioapp.stocks.model.UserStocks;
-import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.StocksRepo;
-import com.portfolioapp.stocks.repository.UserStocksRepo;
-import com.portfolioapp.stocks.service.UserStocksService;
-import com.portfolioapp.stocks.utils.Transactions;
+import com.portfolioapp.stocks.utils.TransactionsLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -18,12 +13,12 @@ public class UserController {
 
     private final StocksRepo stocksRepo;
 
-    private final Transactions transactions;
+    private final TransactionsLogic transactionsLogic;
 
     @Autowired
-    public UserController(StocksRepo stocksRepo, Transactions transactions) {
+    public UserController(StocksRepo stocksRepo, TransactionsLogic transactionsLogic) {
         this.stocksRepo = stocksRepo;
-        this.transactions = transactions;
+        this.transactionsLogic = transactionsLogic;
     }
 
     @PostMapping(path = "/transact/{userId}")
@@ -46,14 +41,14 @@ public class UserController {
 
         if ("buy".equalsIgnoreCase(type)) {
 
-            transactions.buyStock(userId, stock, quantity);
+            transactionsLogic.buyStock(userId, stock, quantity);
 
             return "Stock bought successfully.";
         }
 
         else if ("sell".equalsIgnoreCase(type)) {
 
-            transactions.sellStock(userId, stock, quantity);
+            transactionsLogic.sellStock(userId, stock, quantity);
 
             return "Stock sold successfully.";
         }
