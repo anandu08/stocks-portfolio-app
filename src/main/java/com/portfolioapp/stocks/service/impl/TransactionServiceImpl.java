@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
@@ -52,6 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
         transactions.setStockId(stock.getId());
         transactions.setTransactPrice(stock.getClosePrice());
         transactions.setQuantity(quantity);
+        transactionRepo.save(transactions);
 
         Optional<UserStocks> userStocksOptional = userStocksRepo.findById(userStocksId);
 
@@ -67,12 +66,17 @@ public class TransactionServiceImpl implements TransactionService {
 
     }
 @Override
-    public void sellStock(long userId, Stock stock, long quantity) {
+    public boolean sellStock(long userId, Stock stock, long quantity) {
 
         Transactions transactions = new Transactions();
 
 
         List<UserStocks> userStockFields = userStocksRepo.findByUserIdAndStockId(userId, stock.getId());
+
+        if(userStockFields.isEmpty()) {
+            System.out.println("Hello");
+            return false;
+        }
 
         UserStocksId userStocksId = new UserStocksId();
         userStocksId.setStockId(stock.getId());
@@ -83,6 +87,8 @@ public class TransactionServiceImpl implements TransactionService {
         transactions.setStockId(stock.getId());
         transactions.setTransactPrice(stock.getClosePrice());
         transactions.setQuantity(quantity);
+
+        transactionRepo.save(transactions);
 
         System.out.println(userStockFields.size());
 
@@ -111,5 +117,6 @@ public class TransactionServiceImpl implements TransactionService {
                 break;
             }
         }
-    }
+    return true;
+}
 }

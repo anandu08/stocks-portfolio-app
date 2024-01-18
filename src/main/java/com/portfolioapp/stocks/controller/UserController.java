@@ -18,10 +18,8 @@ public class UserController {
 
     @Autowired
     private StocksRepo stocksRepo;
-
     @Autowired
     private  UserStocksRepo userStocksRepo;
-
     @Autowired
     private TransactionService transactionService;
 
@@ -53,9 +51,13 @@ public class UserController {
 
         else if ("sell".equalsIgnoreCase(type)) {
 
-            transactionService.sellStock(userId, stock, quantity);
 
-            return "Stock sold successfully.";
+                if(transactionService.sellStock(userId, stock, quantity))
+
+                return "Stock sold successfully.";
+                else
+                    return "No such stock";
+
         }
 
         else {
@@ -63,45 +65,6 @@ public class UserController {
             return "Invalid transaction type.";
         }
     }
-    @GetMapping(path = "/holdings/{userId}")
-    public HoldingsResponseDTO getHoldings(@PathVariable long userId){
-
-
-        List<StockSummaryDTO> rows = userStocksRepo.getStockSummariesByUserId(userId);
-        HoldingsResponseDTO holdingsResponseDTO = new HoldingsResponseDTO();
-        List<HoldingsDTO> stockHoldingsList = new ArrayList<>();
-
-        BigDecimal totalHoldings = BigDecimal.ZERO;
-        for(StockSummaryDTO row:rows)
-        {
-            String stockId = row.getStockId();
-            Stock stock = stocksRepo.getReferenceById(stockId);
-            BigDecimal stockHoldings = stock.getClosePrice().multiply(BigDecimal.valueOf(row.getTotalQuantity()));
-
-            HoldingsDTO holdingsDTO = HoldingsDTO.builder()
-                                                 .stockName(stock.getStockName())
-                                                 .quantity(row.getTotalQuantity())
-                                                 .userId(userId)
-                                                 .stockId(stockId)
-                                                 .StockHoldings(stockHoldings)
-                                                 .build();
-
-            totalHoldings = totalHoldings.add(stockHoldings);
-            stockHoldingsList.add(holdingsDTO);
-
-
-
-        }
-        holdingsResponseDTO.setHoldings(stockHoldingsList);
-        holdingsResponseDTO.setTotalHoldings(totalHoldings);
-
-
-
-
-
-        return holdingsResponseDTO;
-    }
-
 
 
 

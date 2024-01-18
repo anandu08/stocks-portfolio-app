@@ -5,6 +5,7 @@ import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ public class StocksController {
 
 
 
-    @RequestMapping("/update-stocks")
+    @PostMapping("/update-stocks")
     public void update() {
         String filePath = "/Users/anandus/Downloads/cm12JAN2024bhav.csv";
         System.out.println("I am here");

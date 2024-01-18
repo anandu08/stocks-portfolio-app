@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TransactionService {
 
-    public void sellStock(long userId, Stock stock, long quantity);
+    public boolean sellStock(long userId, Stock stock, long quantity);
     public void buyStock(long userId, Stock stock, long quantity);
 }

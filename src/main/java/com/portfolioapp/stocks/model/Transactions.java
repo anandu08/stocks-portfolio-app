@@ -22,6 +22,7 @@ public class Transactions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int TrId;
+
     private Long userId;
 
     private String stockId;

@@ -5,9 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 
 @Service
 public interface UserStocksService {
 
     void updateQuantity(UserStocksId userStocksId, long newQuantity);
+    BigDecimal findAvgPrice(long userId,String stockId);
+
 }

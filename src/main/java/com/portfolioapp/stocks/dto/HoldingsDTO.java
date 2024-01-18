@@ -19,5 +19,7 @@ public class HoldingsDTO {
     private Long userId;
     private Long quantity;
     private BigDecimal StockHoldings;
+    private BigDecimal AvgBuyPrice;
+    private BigDecimal GainOrLoss;
 
 }
