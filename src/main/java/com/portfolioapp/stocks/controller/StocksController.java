@@ -10,15 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StocksController {
-
-    private final StocksService stocksService;
-    private final StocksRepo stocksRepo;
-
     @Autowired
-    public StocksController( StocksService stocksService, StocksRepo stocksRepo) {
-        this.stocksService = stocksService;
-        this.stocksRepo = stocksRepo;
-    }
+    private StocksService stocksService;
+    @Autowired
+    private StocksRepo stocksRepo;
+
+
 
     @RequestMapping("/update-stocks")
     public void update() {
@@ -28,8 +25,7 @@ public class StocksController {
     }
     @RequestMapping("get-stock/{id}")
     public Stock getStock(@PathVariable String id){
-        Stock stock = stocksRepo.findStockById(id);
-        return stock;
+        return stocksRepo.findStockById(id);
 
 
     }
