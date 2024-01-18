@@ -3,7 +3,6 @@ package com.portfolioapp.stocks.controller;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
-import com.portfolioapp.stocks.utils.UpdateStocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
