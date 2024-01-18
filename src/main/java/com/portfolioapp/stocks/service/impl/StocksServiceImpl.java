@@ -2,6 +2,7 @@ package com.portfolioapp.stocks.service.impl;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import com.portfolioapp.stocks.exception.StockUpdateException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
@@ -18,12 +19,11 @@ import java.math.BigDecimal;
 @Service
 public class StocksServiceImpl implements StocksService {
 
-    private final StocksRepo repository;
-
     @Autowired
-    public StocksServiceImpl(StocksRepo repository) {
-        this.repository = repository;
-    }
+    private StocksRepo repository;
+
+
+
     @Override
     public void updater(MultipartFile file) {
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
@@ -37,7 +37,7 @@ public class StocksServiceImpl implements StocksService {
                 }
             }
         } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
+            throw new StockUpdateException("Error updating stocks from CSV: " + e.getMessage());
         }
     }
 

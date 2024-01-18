@@ -1,5 +1,8 @@
 package com.portfolioapp.stocks.service.impl;
 
+import com.portfolioapp.stocks.exception.InvalidQuantityException;
+import com.portfolioapp.stocks.exception.StockNotAvailableException;
+import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.Transactions;
 import com.portfolioapp.stocks.model.UserStocks;
@@ -32,6 +35,13 @@ public class TransactionServiceImpl implements TransactionService {
 @Override
     public void buyStock(long userId, Stock stock, long quantity) {
 
+
+    if (stock == null) {
+        throw new StockNotFoundException("Stock not found.");
+    }
+    if (quantity <= 0) {
+        throw new InvalidQuantityException("Invalid quantity. Quantity must be greater than 0.");
+    }
         UserStocks userStocks = new UserStocks();
         UserStocksId userStocksId = new UserStocksId();
         Transactions transactions = new Transactions();
@@ -73,7 +83,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 
         List<UserStocks> userStockFields = userStocksRepo.findByUserIdAndStockId(userId, stock.getId());
-
+    if (userStockFields.isEmpty()) {
+        throw new StockNotAvailableException("No stocks available for selling.");
+    }
         if(userStockFields.isEmpty()) {
             System.out.println("Hello");
             return false;
