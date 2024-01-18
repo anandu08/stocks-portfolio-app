@@ -7,12 +7,15 @@ import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
-@Component
+@Service
 public class StocksServiceImpl implements StocksService {
 
     private final StocksRepo repository;
@@ -22,8 +25,8 @@ public class StocksServiceImpl implements StocksService {
         this.repository = repository;
     }
     @Override
-    public void updater(String filePath) {
-        try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
+    public void updater(MultipartFile file) {
+        try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] header = csvReader.readNext();
 
             if (header != null) {

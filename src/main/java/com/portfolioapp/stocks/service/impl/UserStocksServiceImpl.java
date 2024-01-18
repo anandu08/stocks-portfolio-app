@@ -5,12 +5,15 @@ import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.UserStocksRepo;
 import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
+
+
 @Service
 public class UserStocksServiceImpl implements UserStocksService {
 
