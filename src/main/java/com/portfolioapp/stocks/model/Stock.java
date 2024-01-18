@@ -26,13 +26,7 @@ public class Stock {
     private BigDecimal high;
     private BigDecimal low;
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            @JoinColumn(name = "purchasePrice", referencedColumnName = "purchasePrice"),
-            @JoinColumn(name = "stockId", referencedColumnName = "stockId")
-    })
-    private UserStocks userStocks;
+
 
 
 }

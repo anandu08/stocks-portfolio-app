@@ -15,7 +15,7 @@ import java.util.Objects;
 public class UserStocksId implements Serializable {
 
     @Column(name = "userId")
-    private long userId;
+    private Long userId;
 
     @Column(name = "purchasePrice")
     private BigDecimal purchasePrice;

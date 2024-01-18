@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users_stocks")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,10 +19,7 @@ public class UserStocks {
     private UserStocksId id;
 
     @Column(name = "quantity")
-    private long quantity;
-
-    @OneToMany(mappedBy = "userStocks", cascade = CascadeType.ALL)
-    private Set<Stock> stocks;
+    private Long quantity;
 
 
 }

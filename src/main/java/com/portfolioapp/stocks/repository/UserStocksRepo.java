@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface UserStocksRepo extends JpaRepository<UserStocks, UserStocksId> {
 
-    @Query("SELECT u.quantity, u.id.purchasePrice FROM UserStocks u JOIN u.stocks s WHERE u.id.userId = :userId AND s.id = :stockId")
-    List<Object[]> findFieldsByUserIdAndStockId(@Param("userId") long userId, @Param("stockId") String stockId);
+    @Query("SELECT us FROM UserStocks us WHERE us.id.userId = :userId AND us.id.stockId = :stockId")
+    List<UserStocks> findByUserIdAndStockId(@Param("userId") long userId, @Param("stockId") String stockId);
 
 
 

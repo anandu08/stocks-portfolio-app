@@ -10,16 +10,17 @@ import java.util.*;
 
 @RestController
 public class UserController {
-
+    @Autowired
     private final StocksRepo stocksRepo;
 
+    @Autowired
     private final TransactionsLogic transactionsLogic;
 
-    @Autowired
     public UserController(StocksRepo stocksRepo, TransactionsLogic transactionsLogic) {
         this.stocksRepo = stocksRepo;
         this.transactionsLogic = transactionsLogic;
     }
+
 
     @PostMapping(path = "/transact/{userId}")
     public String buyOrSell(@PathVariable long userId,

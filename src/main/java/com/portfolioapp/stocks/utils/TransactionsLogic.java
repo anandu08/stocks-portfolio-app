@@ -5,6 +5,7 @@ import com.portfolioapp.stocks.model.Transactions;
 import com.portfolioapp.stocks.model.UserStocks;
 import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.StocksRepo;
+import com.portfolioapp.stocks.repository.TransactionRepo;
 import com.portfolioapp.stocks.repository.UserStocksRepo;
 import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class TransactionsLogic {
     @Autowired
     private UserStocksService userStocksService;
 
+    @Autowired
+    private TransactionRepo transactionRepo;
+
 
     public void buyStock(long userId, Stock stock, long quantity) {
 
@@ -39,9 +43,7 @@ public class TransactionsLogic {
 
         userStocks.setId(userStocksId);
         userStocks.setQuantity(quantity);
-        Set<Stock> stocks = new HashSet<>();
-        stocks.add(stock);
-        userStocks.setStocks(stocks);
+
 
 
         transactions.setUserId(userId);
@@ -69,7 +71,7 @@ public class TransactionsLogic {
         Transactions transactions = new Transactions();
 
 
-        List<Object[]> userStockFields = userStocksRepo.findFieldsByUserIdAndStockId(userId, stock.getId());
+        List<UserStocks> userStockFields = userStocksRepo.findByUserIdAndStockId(userId, stock.getId());
 
         UserStocksId userStocksId = new UserStocksId();
         userStocksId.setStockId(stock.getId());
@@ -83,10 +85,10 @@ public class TransactionsLogic {
 
         System.out.println(userStockFields.size());
 
-        for (Object[] fields : userStockFields) {
+        for (UserStocks fields : userStockFields) {
 
-            long boughtQuantity = (long) fields[0];
-            BigDecimal purchasedPrice = (BigDecimal) fields[1];
+            long boughtQuantity =  fields.getQuantity();
+            BigDecimal purchasedPrice =  fields.getId().getPurchasePrice();
 
             System.out.println(purchasedPrice);
 
