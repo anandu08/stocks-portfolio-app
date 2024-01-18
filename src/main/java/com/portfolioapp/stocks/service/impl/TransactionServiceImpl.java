@@ -1,4 +1,4 @@
-package com.portfolioapp.stocks.utils;
+package com.portfolioapp.stocks.service.impl;
 
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.Transactions;
@@ -7,6 +7,7 @@ import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.repository.TransactionRepo;
 import com.portfolioapp.stocks.repository.UserStocksRepo;
+import com.portfolioapp.stocks.service.TransactionService;
 import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
-public class TransactionsLogic {
+public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private StocksRepo stocksRepo;
     @Autowired
@@ -29,7 +30,7 @@ public class TransactionsLogic {
     @Autowired
     private TransactionRepo transactionRepo;
 
-
+@Override
     public void buyStock(long userId, Stock stock, long quantity) {
 
         UserStocks userStocks = new UserStocks();
@@ -65,7 +66,7 @@ public class TransactionsLogic {
         }
 
     }
-
+@Override
     public void sellStock(long userId, Stock stock, long quantity) {
 
         Transactions transactions = new Transactions();

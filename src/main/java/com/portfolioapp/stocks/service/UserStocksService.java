@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
+@Service
 public interface UserStocksService {
 
     void updateQuantity(UserStocksId userStocksId, long newQuantity);

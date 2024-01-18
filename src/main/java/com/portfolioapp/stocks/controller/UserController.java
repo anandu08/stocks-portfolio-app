@@ -2,6 +2,7 @@ package com.portfolioapp.stocks.controller;
 
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.repository.StocksRepo;
+import com.portfolioapp.stocks.service.TransactionService;
 import com.portfolioapp.stocks.utils.TransactionsLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,12 @@ public class UserController {
     private final StocksRepo stocksRepo;
 
     @Autowired
-    private final TransactionsLogic transactionsLogic;
+    private final TransactionService transactionService;
 
-    public UserController(StocksRepo stocksRepo, TransactionsLogic transactionsLogic) {
+    public UserController(StocksRepo stocksRepo, TransactionService transactionService) {
         this.stocksRepo = stocksRepo;
-        this.transactionsLogic = transactionsLogic;
+        this.transactionService = transactionService;
+
     }
 
 
@@ -42,14 +44,14 @@ public class UserController {
 
         if ("buy".equalsIgnoreCase(type)) {
 
-            transactionsLogic.buyStock(userId, stock, quantity);
+            transactionService.buyStock(userId, stock, quantity);
 
             return "Stock bought successfully.";
         }
 
         else if ("sell".equalsIgnoreCase(type)) {
 
-            transactionsLogic.sellStock(userId, stock, quantity);
+            transactionService.sellStock(userId, stock, quantity);
 
             return "Stock sold successfully.";
         }

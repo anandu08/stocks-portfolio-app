@@ -1,9 +1,10 @@
-package com.portfolioapp.stocks.utils;
+package com.portfolioapp.stocks.service.impl;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.repository.StocksRepo;
+import com.portfolioapp.stocks.service.StocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,15 +13,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @Component
-public class UpdateStocks {
+public class StocksServiceImpl implements StocksService {
 
     private final StocksRepo repository;
 
     @Autowired
-    public UpdateStocks(StocksRepo repository) {
+    public StocksServiceImpl(StocksRepo repository) {
         this.repository = repository;
     }
-
+@Override
     public void updater(String filePath) {
         try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
             String[] header = csvReader.readNext();
@@ -44,7 +45,6 @@ public class UpdateStocks {
         stock.setClosePrice(new BigDecimal(line[5]));
         stock.setHigh(new BigDecimal(line[3]));
         stock.setLow(new BigDecimal(line[4]));
-        // Add other fields as needed
         System.out.println(stock);
 
         return stock;
