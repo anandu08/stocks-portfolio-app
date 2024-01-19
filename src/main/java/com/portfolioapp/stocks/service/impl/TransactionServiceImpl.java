@@ -92,10 +92,6 @@ public class TransactionServiceImpl implements TransactionService {
     if (userStockFields.isEmpty()) {
         throw new StockNotAvailableException("No stocks available for selling.");
     }
-        if(userStockFields.isEmpty()) {
-            System.out.println("Hello");
-            return false;
-        }
 
         UserStocksId userStocksId = new UserStocksId();
         userStocksId.setStockId(stock.getId());

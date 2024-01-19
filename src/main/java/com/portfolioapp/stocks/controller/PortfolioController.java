@@ -84,6 +84,7 @@ public class PortfolioController {
 
 
     @GetMapping(path = "/portfolio/{userId}")
+
     public ResponseEntity<PortfolioDTO> getPorfolio(@PathVariable long userId) {
 
         try{

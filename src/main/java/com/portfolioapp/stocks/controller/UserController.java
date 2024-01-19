@@ -22,22 +22,54 @@ public class UserController {
     private UserStocksService userStocksService;
     @Autowired
     private StocksService stocksService;
+
+
     @PostMapping(path = "/transact/{userId}")
     public String buyOrSell(@PathVariable long userId,
                             @RequestBody Map<String, Object> transactionDetails) {
         try {
+            if (!transactionDetails.containsKey("type") ||
+                    !transactionDetails.containsKey("stockId") ||
+                    !transactionDetails.containsKey("quantity")) {
+                throw new IllegalArgumentException("Missing required fields. Please provide 'type', 'stockId', and 'quantity'.");
+            }
+
             String type = (String) transactionDetails.get("type");
-            long stockId = ((Number) transactionDetails.get("stockId")).longValue();
-            long quantity = ((Number) transactionDetails.get("quantity")).longValue();
+            long stockId;
+            long quantity;
+
+            if (!"buy".equalsIgnoreCase(type) && !"sell".equalsIgnoreCase(type)) {
+                throw new IllegalArgumentException("Invalid transaction type. Use 'buy' or 'sell'.");
+            }
+
+            if (transactionDetails.get("stockId") == null) {
+                throw new IllegalArgumentException("'stockId' is required and must be a valid number.");
+            } else {
+                try {
+                    stockId = ((Number) transactionDetails.get("stockId")).longValue();
+                } catch (ClassCastException e) {
+                    throw new IllegalArgumentException("'stockId' must be a valid number.");
+                }
+            }
+
+            if (transactionDetails.get("quantity") == null) {
+                throw new IllegalArgumentException("'quantity' is required and must be a valid number.");
+            } else {
+                try {
+                    quantity = ((Number) transactionDetails.get("quantity")).longValue();
+                } catch (ClassCastException e) {
+                    throw new IllegalArgumentException("'quantity' must be a valid number.");
+                }
+            }
 
             Stock stock = stocksService.findStockById(stockId);
 
             if (stock == null) {
-                throw new StockNotFoundException("Stock not found.");
+                throw new IllegalArgumentException("Stock not found.");
             }
 
             if (quantity <= 0) {
-                throw new InvalidQuantityException("Invalid quantity. Quantity must be greater than 0.");
+                throw new IllegalArgumentException("Invalid quantity. Quantity must be greater than 0.");
             }
 
             if ("buy".equalsIgnoreCase(type)) {
@@ -52,7 +84,7 @@ public class UserController {
             } else {
                 throw new IllegalArgumentException("Invalid transaction type.");
             }
-        } catch (StockNotFoundException | InvalidQuantityException | StockNotAvailableException e) {
+        } catch (StockNotFoundException | InvalidQuantityException | StockNotAvailableException | IllegalArgumentException e) {
             return e.getMessage();
         }
     catch (Exception e) {
