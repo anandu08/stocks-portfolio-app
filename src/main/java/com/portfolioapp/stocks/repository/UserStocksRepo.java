@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserStocksRepo extends JpaRepository<UserStocks, UserStocksId> {
 
     @Query("SELECT us FROM UserStocks us WHERE us.id.userId = :userId AND us.id.stockId = :stockId")
-    List<UserStocks> findByUserIdAndStockId(@Param("userId") long userId, @Param("stockId") String stockId);
+    List<UserStocks> findByUserIdAndStockId(@Param("userId") long userId, @Param("stockId") Long stockId);
 
     @Query("SELECT NEW com.portfolioapp.stocks.dto.StockSummaryDTO(us.id.stockId, SUM(us.quantity)) " +
             "FROM UserStocks us " +

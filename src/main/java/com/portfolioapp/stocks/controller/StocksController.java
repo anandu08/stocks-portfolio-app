@@ -35,7 +35,7 @@ public class StocksController {
     }
 
     @GetMapping("get-stock/{id}")
-    public ResponseEntity<Stock> getStock(@PathVariable String id) {
+    public ResponseEntity<Stock> getStock(@PathVariable Long id) {
         try {
             Stock stock = stocksRepo.findStockById(id);
             if (stock != null) {

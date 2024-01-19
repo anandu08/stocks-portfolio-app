@@ -19,6 +19,6 @@ public class UserStocksId implements Serializable {
     @Column(name = "purchasePrice")
     private BigDecimal purchasePrice;
     @Column(name = "stockId")
-    private String stockId;
+    private Long stockId;
 
 }

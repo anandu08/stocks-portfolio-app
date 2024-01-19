@@ -34,7 +34,7 @@ public class UserStocksServiceImpl implements UserStocksService {
     }
 
     @Override
-    public BigDecimal findAvgPrice(long userId, String stockId) {
+    public BigDecimal findAvgPrice(long userId, Long stockId) {
         List<UserStocks> purchasePrices = userStocksRepo.findByUserIdAndStockId(userId, stockId);
         long totalQty = 0;
         BigDecimal totalValue = BigDecimal.ZERO;

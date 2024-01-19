@@ -30,8 +30,8 @@ public class UserController {
                             @RequestBody Map<String, Object> transactionDetails) {
         try {
             String type = (String) transactionDetails.get("type");
-            String stockId = (String) transactionDetails.get("stockId");
-            long quantity = Long.parseLong((String) transactionDetails.get("quantity"));
+            long stockId = ((Number) transactionDetails.get("stockId")).longValue();
+            long quantity = ((Number) transactionDetails.get("quantity")).longValue();
 
             Stock stock = stocksRepo.findStockById(stockId);
 

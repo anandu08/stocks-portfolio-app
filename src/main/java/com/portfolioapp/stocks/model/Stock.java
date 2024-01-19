@@ -15,7 +15,7 @@ public class Stock {
 
     @Id
     @Column(name = "stocksId", unique = true, nullable = false)
-    private String id;
+    private Long id;
 
 
     @Column(name = "stockName", columnDefinition = "VARCHAR(255) DEFAULT 'UNDEFINED'")

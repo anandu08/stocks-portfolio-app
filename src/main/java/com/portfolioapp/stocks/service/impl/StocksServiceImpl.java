@@ -43,11 +43,12 @@ public class StocksServiceImpl implements StocksService {
 
     private Stock mapToStock(String[] line) {
         Stock stock = new Stock();
-        stock.setId(line[0]);
-        stock.setOpenPrice(new BigDecimal(line[2]));
-        stock.setClosePrice(new BigDecimal(line[5]));
-        stock.setHigh(new BigDecimal(line[3]));
-        stock.setLow(new BigDecimal(line[4]));
+        stock.setId(Long.valueOf(line[0]));
+        stock.setStockName(line[1]);
+        stock.setOpenPrice(new BigDecimal(line[4]));
+        stock.setClosePrice(new BigDecimal(line[7]));
+        stock.setHigh(new BigDecimal(line[5]));
+        stock.setLow(new BigDecimal(line[6]));
         System.out.println(stock);
 
         return stock;

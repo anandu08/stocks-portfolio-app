@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class StockSummaryDTO {
-    private String stockId;
+    private Long stockId;
     private Long totalQuantity;
 }

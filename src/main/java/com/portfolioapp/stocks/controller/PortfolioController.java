@@ -53,7 +53,7 @@ public class PortfolioController {
 
             BigDecimal totalHoldings = BigDecimal.ZERO;
             for (StockSummaryDTO row : rows) {
-                String stockId = row.getStockId();
+                long stockId = row.getStockId();
                 Stock stock = stocksRepo.getReferenceById(stockId);
                 BigDecimal stockHoldings = stock.getClosePrice().multiply(BigDecimal.valueOf(row.getTotalQuantity()));
                 BigDecimal avgPrice = userStocksService.findAvgPrice(userId, stockId);

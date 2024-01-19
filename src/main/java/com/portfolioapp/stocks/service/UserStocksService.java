@@ -12,6 +12,6 @@ import java.math.BigDecimal;
 public interface UserStocksService {
 
     void updateQuantity(UserStocksId userStocksId, long newQuantity);
-    BigDecimal findAvgPrice(long userId,String stockId);
+    BigDecimal findAvgPrice(long userId,Long stockId);
 
 }

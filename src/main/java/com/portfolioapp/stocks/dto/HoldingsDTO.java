@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class HoldingsDTO {
 
-    private String stockId;
+    private Long stockId;
     private String stockName;
     private Long userId;
     private Long quantity;

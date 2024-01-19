@@ -25,7 +25,7 @@ public class Transactions {
 
     private Long userId;
 
-    private String stockId;
+    private Long stockId;
     private String type;
     private BigDecimal transactPrice;
     private Long quantity;
