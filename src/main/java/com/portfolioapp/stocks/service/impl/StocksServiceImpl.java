@@ -19,9 +19,12 @@ import java.math.BigDecimal;
 @Service
 public class StocksServiceImpl implements StocksService {
 
-    @Autowired
     private StocksRepo repository;
 
+    @Autowired
+    public void setRepository(StocksRepo repository) {
+        this.repository = repository;
+    }
 
 
     @Override
