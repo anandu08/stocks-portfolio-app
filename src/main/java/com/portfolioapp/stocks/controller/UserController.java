@@ -1,15 +1,13 @@
 package com.portfolioapp.stocks.controller;
 
-import com.portfolioapp.stocks.dto.HoldingsDTO;
-import com.portfolioapp.stocks.dto.HoldingsResponseDTO;
-import com.portfolioapp.stocks.dto.StockSummaryDTO;
+
 import com.portfolioapp.stocks.exception.InvalidQuantityException;
 import com.portfolioapp.stocks.exception.StockNotAvailableException;
 import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
-import com.portfolioapp.stocks.repository.StocksRepo;
-import com.portfolioapp.stocks.repository.UserStocksRepo;
+import com.portfolioapp.stocks.service.StocksService;
 import com.portfolioapp.stocks.service.TransactionService;
+import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +17,11 @@ import java.util.*;
 public class UserController {
 
     @Autowired
-    private StocksRepo stocksRepo;
-    @Autowired
-    private UserStocksRepo userStocksRepo;
-    @Autowired
     private TransactionService transactionService;
-
+    @Autowired
+    private UserStocksService userStocksService;
+    @Autowired
+    private StocksService stocksService;
     @PostMapping(path = "/transact/{userId}")
     public String buyOrSell(@PathVariable long userId,
                             @RequestBody Map<String, Object> transactionDetails) {
@@ -33,7 +30,7 @@ public class UserController {
             long stockId = ((Number) transactionDetails.get("stockId")).longValue();
             long quantity = ((Number) transactionDetails.get("quantity")).longValue();
 
-            Stock stock = stocksRepo.findStockById(stockId);
+            Stock stock = stocksService.findStockById(stockId);
 
             if (stock == null) {
                 throw new StockNotFoundException("Stock not found.");
@@ -58,5 +55,9 @@ public class UserController {
         } catch (StockNotFoundException | InvalidQuantityException | StockNotAvailableException e) {
             return e.getMessage();
         }
+    catch (Exception e) {
+        return "An unexpected error occurred.";
+    }
+
     }
 }

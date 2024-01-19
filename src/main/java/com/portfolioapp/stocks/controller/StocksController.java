@@ -3,7 +3,6 @@ package com.portfolioapp.stocks.controller;
 import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.StockUpdateException;
 import com.portfolioapp.stocks.model.Stock;
-import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class StocksController {
     @Autowired
     private StocksService stocksService;
-    @Autowired
-    private StocksRepo stocksRepo;
-
-
 
     @PostMapping("/update-stocks")
     public ResponseEntity<String> update(@RequestParam("file") MultipartFile file) {
@@ -37,7 +32,7 @@ public class StocksController {
     @GetMapping("get-stock/{id}")
     public ResponseEntity<Stock> getStock(@PathVariable Long id) {
         try {
-            Stock stock = stocksRepo.findStockById(id);
+            Stock stock = stocksService.findStockById(id);
             if (stock != null) {
                 return ResponseEntity.ok(stock);
             } else {

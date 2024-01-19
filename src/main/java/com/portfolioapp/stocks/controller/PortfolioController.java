@@ -8,9 +8,7 @@ import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.Transactions;
-import com.portfolioapp.stocks.repository.StocksRepo;
-import com.portfolioapp.stocks.repository.TransactionRepo;
-import com.portfolioapp.stocks.repository.UserStocksRepo;
+import com.portfolioapp.stocks.service.StocksService;
 import com.portfolioapp.stocks.service.TransactionService;
 import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +27,11 @@ import java.util.List;
 public class PortfolioController {
 
     @Autowired
-    private StocksRepo stocksRepo;
-    @Autowired
-    private UserStocksRepo userStocksRepo;
-    @Autowired
     private TransactionService transactionService;
     @Autowired
-    private TransactionRepo transactionRepo;
-    @Autowired
     private UserStocksService userStocksService;
+    @Autowired
+    private StocksService stocksService;
 
 
     @GetMapping(path = "/holdings/{userId}")
@@ -45,7 +39,7 @@ public class PortfolioController {
 
 
         try{
-            List<StockSummaryDTO> rows = userStocksRepo.getStockSummariesByUserId(userId);
+            List<StockSummaryDTO> rows = userStocksService.getStockSummariesByUserId(userId);
             if (rows.isEmpty() )
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HoldingsResponseDTO());
             HoldingsResponseDTO holdingsResponseDTO = new HoldingsResponseDTO();
@@ -54,7 +48,7 @@ public class PortfolioController {
             BigDecimal totalHoldings = BigDecimal.ZERO;
             for (StockSummaryDTO row : rows) {
                 long stockId = row.getStockId();
-                Stock stock = stocksRepo.getReferenceById(stockId);
+                Stock stock = stocksService.getReferenceById(stockId);
                 BigDecimal stockHoldings = stock.getClosePrice().multiply(BigDecimal.valueOf(row.getTotalQuantity()));
                 BigDecimal avgPrice = userStocksService.findAvgPrice(userId, stockId);
                 BigDecimal GainOrLoss = BigDecimal.ZERO;
@@ -93,7 +87,7 @@ public class PortfolioController {
     public ResponseEntity<PortfolioDTO> getPorfolio(@PathVariable long userId) {
 
         try{
-            List<Transactions> transactions = transactionRepo.findByUserId(userId);
+            List<Transactions> transactions = transactionService.findByUserId(userId);
             if (transactions.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PortfolioDTO());
             HoldingsResponseDTO holdingsResponseDTO = getHoldings(userId).getBody();

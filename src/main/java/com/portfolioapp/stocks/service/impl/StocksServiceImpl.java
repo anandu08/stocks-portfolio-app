@@ -44,6 +44,16 @@ public class StocksServiceImpl implements StocksService {
         }
     }
 
+    @Override
+    public Stock getReferenceById(Long stockId) {
+        return repository.getReferenceById(stockId);
+    }
+
+    @Override
+    public Stock findStockById(Long id) {
+        return repository.findStockById(id);
+    }
+
     private Stock mapToStock(String[] line) {
         Stock stock = new Stock();
         stock.setId(Long.valueOf(line[0]));

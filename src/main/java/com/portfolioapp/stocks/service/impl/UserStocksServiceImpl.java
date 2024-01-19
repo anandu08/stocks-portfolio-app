@@ -1,5 +1,6 @@
 package com.portfolioapp.stocks.service.impl;
 
+import com.portfolioapp.stocks.dto.StockSummaryDTO;
 import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.UserStocks;
@@ -49,5 +50,10 @@ public class UserStocksServiceImpl implements UserStocksService {
         } else {
             throw new UserNotFoundException("User or stock not found for userId: " + userId + ", stockId: " + stockId);
         }
+    }
+
+    @Override
+    public List<StockSummaryDTO> getStockSummariesByUserId(Long userId) {
+        return userStocksRepo.getStockSummariesByUserId(userId);
     }
 }

@@ -76,7 +76,13 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
     }
-@Override
+
+    @Override
+    public List<Transactions> findByUserId(Long userId) {
+        return transactionRepo.findByUserId(userId);
+    }
+
+    @Override
     public boolean sellStock(long userId, Stock stock, long quantity) {
 
         Transactions transactions = new Transactions();
