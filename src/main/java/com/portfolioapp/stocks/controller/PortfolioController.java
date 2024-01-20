@@ -47,8 +47,6 @@ public class PortfolioController {
 
         try{
 
-
-
             Optional<User> user = userService.findUserById(userId);
             if (user.isEmpty()) {
                 throw new DataNotFoundException("User not found.");
@@ -102,17 +100,23 @@ public class PortfolioController {
     public ResponseEntity<PortfolioDTO> getPorfolio(@PathVariable long userId) {
 
         try{
+            Optional<User> user = userService.findUserById(userId);
+            if (user.isEmpty()) {
+                throw new DataNotFoundException("User not found.");
+            }
+
             List<Transactions> transactions = transactionService.findByUserId(userId);
             if (transactions.isEmpty()) {
-                throw new DataNotFoundException("ABCS");
+                throw new DataNotFoundException("Transaction not found");
             }
+
             HoldingsResponseDTO holdingsResponseDTO = getHoldings(userId).getBody();
 
             BigDecimal totalBuy = BigDecimal.ZERO;
-            long BuyQty = 0;
-
             BigDecimal totalSell = BigDecimal.ZERO;
+
             long SellQty = 0;
+            long BuyQty = 0;
 
             BigDecimal GainOrLoss = BigDecimal.ZERO;
             BigDecimal GainOrLossPercent = BigDecimal.ZERO;
