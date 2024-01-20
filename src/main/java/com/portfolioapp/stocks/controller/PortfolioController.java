@@ -9,8 +9,10 @@ import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.Transactions;
+import com.portfolioapp.stocks.model.User;
 import com.portfolioapp.stocks.service.StocksService;
 import com.portfolioapp.stocks.service.TransactionService;
+import com.portfolioapp.stocks.service.UserService;
 import com.portfolioapp.stocks.service.UserStocksService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class PortfolioController {
@@ -36,12 +39,22 @@ public class PortfolioController {
     @Autowired
     private StocksService stocksService;
 
+    @Autowired
+    private     UserService userService;
+
 
     @GetMapping(path = "/holdings/{userId}")
     public ResponseEntity<HoldingsResponseDTO> getHoldings(@PathVariable long userId) {
 
 
         try{
+
+
+
+            Optional<User> user = userService.findUserById(userId);
+            if (user.isEmpty()) {
+                throw new DataNotFoundException("User not found.");
+            }
             List<StockSummaryDTO> rows = userStocksService.getStockSummariesByUserId(userId);
             if (rows.isEmpty() )
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HoldingsResponseDTO());
@@ -80,7 +93,7 @@ public class PortfolioController {
 
             return ResponseEntity.ok(holdingsResponseDTO);
         }
-        catch (StockNotFoundException | UserNotFoundException e) {
+        catch (StockNotFoundException | UserNotFoundException | DataNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HoldingsResponseDTO());
         }
     }

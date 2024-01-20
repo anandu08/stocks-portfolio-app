@@ -2,6 +2,7 @@ package com.portfolioapp.stocks.controller;
 
 
 import com.portfolioapp.stocks.dto.UserRequestDTO;
+import com.portfolioapp.stocks.exception.DataNotFoundException;
 import com.portfolioapp.stocks.exception.InvalidQuantityException;
 import com.portfolioapp.stocks.exception.StockNotAvailableException;
 import com.portfolioapp.stocks.exception.StockNotFoundException;
@@ -14,8 +15,6 @@ import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.util.*;
 @RestController
 public class UserController {
@@ -48,6 +47,13 @@ public class UserController {
     public String buyOrSell(@PathVariable long userId,
                             @RequestBody Map<String, Object> transactionDetails) {
         try {
+
+            Optional<User> user = userService.findUserById(userId);
+            if (user.isEmpty()) {
+                throw new DataNotFoundException("User not found.");
+            }
+
+
             if (!transactionDetails.containsKey("type") ||
                     !transactionDetails.containsKey("stockId") ||
                     !transactionDetails.containsKey("quantity")) {

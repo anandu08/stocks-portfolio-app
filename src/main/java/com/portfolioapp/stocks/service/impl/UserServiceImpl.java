@@ -5,11 +5,18 @@ import com.portfolioapp.stocks.repository.UserRepo;
 import com.portfolioapp.stocks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
-    public User saveUser(User user)
+    public void saveUser(User user)
     {
-        return userRepo.save(user);
+        userRepo.save(user);
+    }
+
+    @Override
+    public Optional<User> findUserById(Long userId) {
+        return userRepo.findById(userId);
     }
 }
