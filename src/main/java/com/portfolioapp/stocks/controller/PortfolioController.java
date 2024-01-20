@@ -38,7 +38,7 @@ public class PortfolioController {
     private StocksService stocksService;
 
     @Autowired
-    private     UserService userService;
+    private UserService userService;
 
 
     @GetMapping(path = "/holdings/{userId}")
