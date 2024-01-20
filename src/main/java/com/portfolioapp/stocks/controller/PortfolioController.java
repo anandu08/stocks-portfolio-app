@@ -4,6 +4,7 @@ import com.portfolioapp.stocks.dto.HoldingsDTO;
 import com.portfolioapp.stocks.dto.HoldingsResponseDTO;
 import com.portfolioapp.stocks.dto.PortfolioDTO;
 import com.portfolioapp.stocks.dto.StockSummaryDTO;
+import com.portfolioapp.stocks.exception.DataNotFoundException;
 import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
@@ -11,7 +12,9 @@ import com.portfolioapp.stocks.model.Transactions;
 import com.portfolioapp.stocks.service.StocksService;
 import com.portfolioapp.stocks.service.TransactionService;
 import com.portfolioapp.stocks.service.UserStocksService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,8 +92,9 @@ public class PortfolioController {
 
         try{
             List<Transactions> transactions = transactionService.findByUserId(userId);
-            if (transactions.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PortfolioDTO());
+            if (transactions.isEmpty()) {
+                throw new DataNotFoundException("ABCS");
+            }
             HoldingsResponseDTO holdingsResponseDTO = getHoldings(userId).getBody();
 
             BigDecimal totalBuy = BigDecimal.ZERO;
@@ -132,7 +136,9 @@ public class PortfolioController {
             return ResponseEntity.ok(portfolioDTO);
         }
         catch (StockNotFoundException | UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(PortfolioDTO.builder().build());
+            throw new StockNotFoundException("abcd");
+        } catch (DataNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

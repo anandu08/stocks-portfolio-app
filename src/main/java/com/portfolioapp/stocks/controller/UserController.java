@@ -1,14 +1,18 @@
 package com.portfolioapp.stocks.controller;
 
 
+import com.portfolioapp.stocks.dto.UserRequestDTO;
 import com.portfolioapp.stocks.exception.InvalidQuantityException;
 import com.portfolioapp.stocks.exception.StockNotAvailableException;
 import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
+import com.portfolioapp.stocks.model.User;
 import com.portfolioapp.stocks.service.StocksService;
 import com.portfolioapp.stocks.service.TransactionService;
+import com.portfolioapp.stocks.service.UserService;
 import com.portfolioapp.stocks.service.UserStocksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -22,7 +26,23 @@ public class UserController {
     private UserStocksService userStocksService;
     @Autowired
     private StocksService stocksService;
+    @Autowired
+    private UserService userService;
 
+    @PostMapping("/users")
+    public ResponseEntity<String> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+        try {
+            User newUser = User.builder()
+                    .name(userRequestDTO.getName())
+                    .email(userRequestDTO.getEmail())
+                    .build();
+            userService.saveUser(newUser);
+
+            return ResponseEntity.ok("User created successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred.");
+        }
+    }
 
     @PostMapping(path = "/transact/{userId}")
     public String buyOrSell(@PathVariable long userId,
