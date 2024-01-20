@@ -28,9 +28,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/users")
+    @PostMapping("/createUser")
     public ResponseEntity<String> createUser(@RequestBody UserRequestDTO userRequestDTO) {
         try {
+            User existingUser = userService.findUserByEmail(userRequestDTO.getEmail());
+            if (existingUser != null) {
+                return ResponseEntity.status(400).body("User with this email already exists.");
+            }
             User newUser = User.builder()
                     .name(userRequestDTO.getName())
                     .email(userRequestDTO.getEmail())
