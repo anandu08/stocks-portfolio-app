@@ -6,6 +6,7 @@ import com.portfolioapp.stocks.exception.StockUpdateException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,10 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
 @Service
+@RequiredArgsConstructor
 public class StocksServiceImpl implements StocksService {
 
-    private StocksRepo repository;
-
-    @Autowired
-    public void setRepository(StocksRepo repository) {
-        this.repository = repository;
-    }
+    private final StocksRepo repository;
 
 
     @Override

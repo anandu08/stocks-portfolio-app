@@ -12,6 +12,7 @@ import com.portfolioapp.stocks.repository.TransactionRepo;
 import com.portfolioapp.stocks.repository.UserStocksRepo;
 import com.portfolioapp.stocks.service.TransactionService;
 import com.portfolioapp.stocks.service.UserStocksService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
-    @Autowired
-    private StocksRepo stocksRepo;
-    @Autowired
-    private UserStocksRepo userStocksRepo;
-    @Autowired
-    private UserStocksService userStocksService;
 
-    @Autowired
-    private TransactionRepo transactionRepo;
+    private final StocksRepo stocksRepo;
+    private final UserStocksRepo userStocksRepo;
+    private final UserStocksService userStocksService;
+
+    private final TransactionRepo transactionRepo;
 
 @Override
     public void buyStock(long userId, Stock stock, long quantity) {

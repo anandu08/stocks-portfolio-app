@@ -11,22 +11,20 @@ import com.portfolioapp.stocks.model.User;
 import com.portfolioapp.stocks.service.StocksService;
 import com.portfolioapp.stocks.service.TransactionService;
 import com.portfolioapp.stocks.service.UserService;
-import com.portfolioapp.stocks.service.UserStocksService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+
+
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private TransactionService transactionService;
-    @Autowired
-    private UserStocksService userStocksService;
-    @Autowired
-    private StocksService stocksService;
-    @Autowired
-    private UserService userService;
+
+    private final TransactionService transactionService;
+    private final StocksService stocksService;
+    private final UserService userService;
 
     @PostMapping("/createUser")
     public ResponseEntity<String> createUser(@RequestBody UserRequestDTO userRequestDTO) {
@@ -43,6 +41,7 @@ public class UserController {
 
             return ResponseEntity.ok("User created successfully.");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body("An unexpected error occurred.");
         }
     }
@@ -118,6 +117,7 @@ public class UserController {
             return e.getMessage();
         }
     catch (Exception e) {
+            e.printStackTrace();
         return "An unexpected error occurred.";
     }
 

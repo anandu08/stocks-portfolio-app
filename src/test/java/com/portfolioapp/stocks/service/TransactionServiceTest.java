@@ -60,7 +60,7 @@ class TransactionServiceTest {
     @Test
     void sellStock_ValidStockAndQuantity_TransactionSuccessful() {
         long userId = 1L;
-        Stock stock = new Stock(); // Create a valid stock object
+        Stock stock = new Stock();
         long quantity = 5L;
 
         UserStocks userStocks = new UserStocks();

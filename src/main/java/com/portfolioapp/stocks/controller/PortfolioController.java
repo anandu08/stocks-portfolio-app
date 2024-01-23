@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PortfolioController {
 
 
-    private PortfolioService portfolioService;
+    private final PortfolioService portfolioService;
 
     @GetMapping(path = "/holdings/{userId}")
     public ResponseEntity<HoldingsResponseDTO> getHoldings(@PathVariable long userId) {

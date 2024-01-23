@@ -4,6 +4,7 @@ import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.StockUpdateException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.service.StocksService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequiredArgsConstructor
 public class StocksController {
-    @Autowired
-    private StocksService stocksService;
+    private final StocksService stocksService;
 
     @PostMapping("/update-stocks")
     public ResponseEntity<String> update(@RequestParam("file") MultipartFile file) {

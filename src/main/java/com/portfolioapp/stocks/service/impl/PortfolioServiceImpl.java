@@ -32,7 +32,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     private final UserStocksService userStocksService;
     private final StocksService stocksService;
-    private final PortfolioService portfolioService;
     private final UserService userService;
 
     @Override
@@ -153,4 +152,4 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     }
-}
+
