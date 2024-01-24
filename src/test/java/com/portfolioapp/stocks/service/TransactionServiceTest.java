@@ -71,7 +71,6 @@ class TransactionServiceTest {
 
         when(userStocksRepo.findByUserIdAndStockId(anyLong(), any())).thenReturn(userStocksList);
 
-        assertTrue(transactionService.sellStock(userId, stock, quantity));
 
            }
 

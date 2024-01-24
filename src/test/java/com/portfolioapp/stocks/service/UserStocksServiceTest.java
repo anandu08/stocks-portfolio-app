@@ -1,6 +1,6 @@
 package com.portfolioapp.stocks.service;
 
-import com.portfolioapp.stocks.exception.StockNotFoundException;
+import com.portfolioapp.stocks.exception.StockNotAvailableException;
 import com.portfolioapp.stocks.model.UserStocks;
 import com.portfolioapp.stocks.model.UserStocksId;
 import com.portfolioapp.stocks.repository.UserStocksRepo;
@@ -49,7 +49,7 @@ public class UserStocksServiceTest {
 
         when(userStocksRepo.findById(userStocksId)).thenReturn(Optional.empty());
 
-        assertThrows(StockNotFoundException.class, () -> userStocksService.updateQuantity(userStocksId, 10L));
+        assertThrows(StockNotAvailableException.class, () -> userStocksService.updateQuantity(userStocksId, 10L));
         verify(userStocksRepo, never()).save(any());
     }
 

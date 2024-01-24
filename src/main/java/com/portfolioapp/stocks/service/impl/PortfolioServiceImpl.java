@@ -35,10 +35,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public HoldingsResponseDTO getHoldings(long userId){
 
-
-
-
-            Optional<User> user = userService.findUserById(userId);
+        Optional<User> user = userService.findUserById(userId);
 
             if (user.isEmpty()) {
                 throw new UserNotFoundException("No data found for userId:"+userId);
@@ -113,11 +110,11 @@ public class PortfolioServiceImpl implements PortfolioService {
 
             for (Transactions transaction : transactions) {
                 if ("buy".equals(transaction.getType())) {
-                    totalBuy = totalBuy.add(transaction.getTransactPrice());
+                    totalBuy = totalBuy.add(transaction.getTransactPrice().multiply(BigDecimal.valueOf(transaction.getQuantity())));
                     BuyQty += transaction.getQuantity();
                 }
                 if ("sell".equals(transaction.getType())) {
-                    totalSell = totalSell.add(transaction.getTransactPrice());
+                    totalSell = totalSell.add(transaction.getTransactPrice().multiply(BigDecimal.valueOf(transaction.getQuantity())));
                     SellQty += transaction.getQuantity();
                 }
             }
@@ -128,9 +125,8 @@ public class PortfolioServiceImpl implements PortfolioService {
                 BigDecimal avgBuy = totalBuy.divide(BigDecimal.valueOf(BuyQty), 2, RoundingMode.HALF_UP);
 
                 GainOrLoss = avgSell.subtract(avgBuy).multiply(BigDecimal.valueOf(SellQty));
-                GainOrLossPercent = GainOrLoss.divide(avgBuy, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+                GainOrLossPercent = GainOrLoss.divide(totalBuy, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
             }
-
             PortfolioDTO portfolioDTO = PortfolioDTO.builder()
                     .totalBuyPrice(totalBuy)
                     .totalPnL(GainOrLoss)
