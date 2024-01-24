@@ -1,6 +1,5 @@
 package com.portfolioapp.stocks.controller;
 
-import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.exception.StockUpdateException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.service.StocksService;
@@ -32,15 +31,9 @@ public class StocksController {
 
     @GetMapping("get-stock/{id}")
     public ResponseEntity<Stock> getStock(@PathVariable Long id) {
-        try {
+
             Stock stock = stocksService.findStockById(id);
-            if (stock != null) {
                 return ResponseEntity.ok(stock);
-            } else {
-                throw new StockNotFoundException("Stock not found for id: " + id);
-            }
-        } catch (StockNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+
     }
 }

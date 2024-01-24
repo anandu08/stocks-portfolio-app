@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class StockNotAvailableException extends RuntimeException {
-    public StockNotAvailableException(String message) {
-        super(message);
+    public StockNotAvailableException(long stockId) {
+        super("Stock not available for id: "+stockId);
     }
 }

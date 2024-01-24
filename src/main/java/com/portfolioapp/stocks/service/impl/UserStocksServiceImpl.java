@@ -1,7 +1,7 @@
 package com.portfolioapp.stocks.service.impl;
 
 import com.portfolioapp.stocks.dto.StockSummaryDTO;
-import com.portfolioapp.stocks.exception.StockNotFoundException;
+import com.portfolioapp.stocks.exception.InvalidQuantityException;
 import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.UserStocks;
 import com.portfolioapp.stocks.model.UserStocksId;
@@ -25,18 +25,23 @@ public class UserStocksServiceImpl implements UserStocksService {
     public void updateQuantity(UserStocksId userStocksId, long newQuantity) {
         Optional<UserStocks> userStocksOptional = userStocksRepo.findById(userStocksId);
 
+        if(newQuantity<0)
+            throw new InvalidQuantityException(newQuantity);
         if (userStocksOptional.isPresent()) {
             UserStocks userStocks = userStocksOptional.get();
             userStocks.setQuantity(newQuantity);
             userStocksRepo.save(userStocks);
         } else {
-            throw new StockNotFoundException("Stock not found for id: " + userStocksId);
+            throw new RuntimeException("No Stock data found for id: " + userStocksId);
         }
     }
 
     @Override
     public BigDecimal findAvgPrice(long userId, Long stockId) {
         List<UserStocks> purchasePrices = userStocksRepo.findByUserIdAndStockId(userId, stockId);
+
+        if(purchasePrices.isEmpty())
+            throw new RuntimeException(String.format("No data found for userId: %d and StockId: %d", userId, stockId));
         long totalQty = 0;
         BigDecimal totalValue = BigDecimal.ZERO;
 
@@ -54,6 +59,9 @@ public class UserStocksServiceImpl implements UserStocksService {
 
     @Override
     public List<StockSummaryDTO> getStockSummariesByUserId(Long userId) {
-        return userStocksRepo.getStockSummariesByUserId(userId);
+        List<StockSummaryDTO> stockSummaryDTOList= userStocksRepo.getStockSummariesByUserId(userId);
+        if(stockSummaryDTOList.isEmpty())
+            throw new UserNotFoundException("No data found for userId:"+userId);
+        return stockSummaryDTOList;
     }
 }

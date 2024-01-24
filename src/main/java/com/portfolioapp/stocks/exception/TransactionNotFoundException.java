@@ -1,7 +1,7 @@
 package com.portfolioapp.stocks.exception;
 
 public class TransactionNotFoundException extends RuntimeException {
-    public TransactionNotFoundException(String message) {
-        super(message);
+    public TransactionNotFoundException(long userId) {
+        super("No transaction found for user id: "+ userId);
     }
 }

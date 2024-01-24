@@ -2,17 +2,15 @@ package com.portfolioapp.stocks.service.impl;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import com.portfolioapp.stocks.exception.StockNotAvailableException;
 import com.portfolioapp.stocks.exception.StockUpdateException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.repository.StocksRepo;
 import com.portfolioapp.stocks.service.StocksService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -21,7 +19,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class StocksServiceImpl implements StocksService {
 
-    private final StocksRepo repository;
+    private final StocksRepo stocksRepo;
 
 
     @Override
@@ -33,7 +31,7 @@ public class StocksServiceImpl implements StocksService {
                 String[] line;
                 while ((line = csvReader.readNext()) != null) {
                     Stock stock = mapToStock(line);
-                    repository.save(stock);
+                    stocksRepo.save(stock);
                 }
             }
         } catch (IOException | CsvValidationException e) {
@@ -43,12 +41,18 @@ public class StocksServiceImpl implements StocksService {
 
     @Override
     public Stock getReferenceById(Long stockId) {
-        return repository.getReferenceById(stockId);
+        Stock stock =  stocksRepo.getReferenceById(stockId);
+        if(stock == null)
+            throw new StockNotAvailableException(stockId);
+        return stock;
     }
 
     @Override
     public Stock findStockById(Long id) {
-        return repository.findStockById(id);
+        Stock stock =  stocksRepo.findStockById(id);
+        if(stock == null)
+            throw  new StockNotAvailableException(id);
+        return stock;
     }
 
     private Stock mapToStock(String[] line) {

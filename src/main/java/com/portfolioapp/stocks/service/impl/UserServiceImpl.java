@@ -1,5 +1,6 @@
 package com.portfolioapp.stocks.service.impl;
 
+import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.User;
 import com.portfolioapp.stocks.repository.UserRepo;
 import com.portfolioapp.stocks.service.UserService;
@@ -21,11 +22,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUserById(Long userId) {
-        return userRepo.findById(userId);
+
+
+        Optional<User> user= userRepo.findById(userId);
+        if(user.isEmpty())
+            throw new UserNotFoundException("No user found for userId:"+userId);
+
+        return user;
     }
 
     @Override
     public User findUserByEmail(String email) {
+
+
         return userRepo.findByEmail(email);
+
     }
 }

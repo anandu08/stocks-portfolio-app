@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface TransactionService {
 
-    public boolean sellStock(long userId, Stock stock, long quantity);
+    public void sellStock(long userId, Stock stock, long quantity);
     public void buyStock(long userId, Stock stock, long quantity);
     List<Transactions>   findByUserId(Long userId);
 

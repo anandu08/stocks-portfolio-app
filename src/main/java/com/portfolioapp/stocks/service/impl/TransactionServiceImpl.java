@@ -1,8 +1,8 @@
 package com.portfolioapp.stocks.service.impl;
 
 import com.portfolioapp.stocks.exception.InvalidQuantityException;
-import com.portfolioapp.stocks.exception.StockNotAvailableException;
-import com.portfolioapp.stocks.exception.StockNotFoundException;
+import com.portfolioapp.stocks.exception.TransactionNotFoundException;
+import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.Transactions;
 import com.portfolioapp.stocks.model.UserStocks;
@@ -35,11 +35,9 @@ public class TransactionServiceImpl implements TransactionService {
     public void buyStock(long userId, Stock stock, long quantity) {
 
 
-    if (stock == null) {
-        throw new StockNotFoundException("Stock not found.");
-    }
+
     if (quantity <= 0) {
-        throw new InvalidQuantityException("Invalid quantity. Quantity must be greater than 0.");
+        throw new InvalidQuantityException(quantity);
     }
         UserStocks userStocks = new UserStocks();
         UserStocksId userStocksId = new UserStocksId();
@@ -78,18 +76,25 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transactions> findByUserId(Long userId) {
-        return transactionRepo.findByUserId(userId);
+
+
+    List<Transactions> transactions = transactionRepo.findByUserId(userId);
+
+    if(transactions.isEmpty())
+        throw new TransactionNotFoundException(userId);
+    return transactions;
+
     }
 
     @Override
-    public boolean sellStock(long userId, Stock stock, long quantity) {
+    public void sellStock(long userId, Stock stock, long quantity) {
 
         Transactions transactions = new Transactions();
 
 
         List<UserStocks> userStockFields = userStocksRepo.findByUserIdAndStockId(userId, stock.getId());
     if (userStockFields.isEmpty()) {
-        throw new StockNotAvailableException("No stocks available for selling.");
+        throw new UserNotFoundException("No data found for userId:"+userId);
     }
 
         UserStocksId userStocksId = new UserStocksId();
@@ -131,6 +136,5 @@ public class TransactionServiceImpl implements TransactionService {
                 break;
             }
         }
-    return true;
 }
 }

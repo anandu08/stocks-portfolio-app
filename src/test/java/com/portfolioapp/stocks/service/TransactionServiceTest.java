@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,16 +42,13 @@ class TransactionServiceTest {
     @Test
     void buyStock_ValidStockAndQuantity_TransactionSuccessful() {
         long userId = 1L;
-        Stock stock = new Stock(); // Create a valid stock object
+        Stock stock = new Stock();
         long quantity = 10L;
 
-        // Mocking
         when(userStocksRepo.findById(any())).thenReturn(Optional.empty());
 
-        // Perform the test
         assertDoesNotThrow(() -> transactionService.buyStock(userId, stock, quantity));
 
-        // Verify interactions
         Mockito.verify(transactionRepo, Mockito.times(1)).save(any());
         Mockito.verify(userStocksRepo, Mockito.times(1)).save(any());
     }

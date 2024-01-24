@@ -1,11 +1,8 @@
 package com.portfolioapp.stocks.controller;
 
-
 import com.portfolioapp.stocks.dto.UserRequestDTO;
-import com.portfolioapp.stocks.exception.DataNotFoundException;
 import com.portfolioapp.stocks.exception.InvalidQuantityException;
 import com.portfolioapp.stocks.exception.StockNotAvailableException;
-import com.portfolioapp.stocks.exception.StockNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.User;
 import com.portfolioapp.stocks.service.StocksService;
@@ -52,9 +49,7 @@ public class UserController {
         try {
 
             Optional<User> user = userService.findUserById(userId);
-            if (user.isEmpty()) {
-                throw new DataNotFoundException("User not found.");
-            }
+
 
 
             if (!transactionDetails.containsKey("type") ||
@@ -92,28 +87,18 @@ public class UserController {
             }
 
             Stock stock = stocksService.findStockById(stockId);
-
-            if (stock == null) {
-                throw new IllegalArgumentException("Stock not found.");
-            }
-
-            if (quantity <= 0) {
-                throw new IllegalArgumentException("Invalid quantity. Quantity must be greater than 0.");
-            }
-
             if ("buy".equalsIgnoreCase(type)) {
                 transactionService.buyStock(userId, stock, quantity);
                 return "Stock bought successfully.";
             } else if ("sell".equalsIgnoreCase(type)) {
-                if (transactionService.sellStock(userId, stock, quantity)) {
+             transactionService.sellStock(userId, stock, quantity);
                     return "Stock sold successfully.";
-                } else {
-                    throw new StockNotAvailableException("No such stock.");
-                }
+
             } else {
                 throw new IllegalArgumentException("Invalid transaction type.");
             }
-        } catch (StockNotFoundException | InvalidQuantityException | StockNotAvailableException | IllegalArgumentException e) {
+        } catch (InvalidQuantityException | StockNotAvailableException | IllegalArgumentException e) {
+            e.printStackTrace();
             return e.getMessage();
         }
     catch (Exception e) {

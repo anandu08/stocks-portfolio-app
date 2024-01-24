@@ -4,16 +4,14 @@ import com.portfolioapp.stocks.dto.HoldingsDTO;
 import com.portfolioapp.stocks.dto.HoldingsResponseDTO;
 import com.portfolioapp.stocks.dto.PortfolioDTO;
 import com.portfolioapp.stocks.dto.StockSummaryDTO;
-import com.portfolioapp.stocks.exception.DataNotFoundException;
-import com.portfolioapp.stocks.exception.StockNotFoundException;
+
+import com.portfolioapp.stocks.exception.TransactionNotFoundException;
 import com.portfolioapp.stocks.exception.UserNotFoundException;
 import com.portfolioapp.stocks.model.Stock;
 import com.portfolioapp.stocks.model.Transactions;
 import com.portfolioapp.stocks.model.User;
 import com.portfolioapp.stocks.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -35,19 +33,19 @@ public class PortfolioServiceImpl implements PortfolioService {
     private final UserService userService;
 
     @Override
-    public HoldingsResponseDTO getHoldings(long userId) throws StockNotFoundException, UserNotFoundException, DataNotFoundException {
+    public HoldingsResponseDTO getHoldings(long userId){
 
 
-        try{
+
 
             Optional<User> user = userService.findUserById(userId);
 
             if (user.isEmpty()) {
-                throw new DataNotFoundException("User not found.");
+                throw new UserNotFoundException("No data found for userId:"+userId);
             }
             List<StockSummaryDTO> rows = userStocksService.getStockSummariesByUserId(userId);
             if (rows.isEmpty()) {
-                return new HoldingsResponseDTO();
+                throw new UserNotFoundException("No data found for userId:"+userId);
             }
 
             HoldingsResponseDTO holdingsResponseDTO = new HoldingsResponseDTO();
@@ -85,23 +83,21 @@ public class PortfolioServiceImpl implements PortfolioService {
 
             return holdingsResponseDTO;
         }
-        catch (StockNotFoundException | UserNotFoundException | DataNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HoldingsResponseDTO()).getBody();
-        }
-    }
+
+
 
     @Override
-    public PortfolioDTO getPortfolio(long userId) throws StockNotFoundException, UserNotFoundException, DataNotFoundException {
+    public PortfolioDTO getPortfolio(long userId) {
 
-        try{
+
             Optional<User> user = userService.findUserById(userId);
             if (user.isEmpty()) {
-                throw new DataNotFoundException("User not found.");
+                throw new UserNotFoundException("No user found with Id:"+userId);
             }
 
             List<Transactions> transactions = transactionService.findByUserId(userId);
             if (transactions.isEmpty()) {
-                throw new DataNotFoundException("Transaction not found");
+                throw new TransactionNotFoundException(userId);
             }
 
             HoldingsResponseDTO holdingsResponseDTO = getHoldings(userId);
@@ -143,12 +139,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                     .build();
 
             return ResponseEntity.ok(portfolioDTO).getBody();
-        }
-        catch (StockNotFoundException | UserNotFoundException e) {
-            throw new StockNotFoundException("abcd");
-        } catch (DataNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     }
