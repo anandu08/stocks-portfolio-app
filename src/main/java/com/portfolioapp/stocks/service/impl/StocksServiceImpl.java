@@ -26,13 +26,12 @@ public class StocksServiceImpl implements StocksService {
     public void updater(MultipartFile file) {
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] header = csvReader.readNext();
-
-            if (header != null) {
+            System.out.println(header);
                 String[] line;
                 while ((line = csvReader.readNext()) != null) {
                     Stock stock = mapToStock(line);
                     stocksRepo.save(stock);
-                }
+
             }
         } catch (IOException | CsvValidationException e) {
             throw new StockUpdateException("Error updating stocks from CSV: " + e.getMessage());
